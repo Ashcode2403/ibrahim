@@ -60,7 +60,7 @@ body {
 .hero-bg {
   position: absolute;
   inset: 0;
-  background-image: url('bg.jpg');
+  background-image: url('bg.jpeg');
   background-size: cover;
   background-position: center top;
   transform: scale(1.05);
@@ -756,7 +756,7 @@ footer {
   position:absolute;
   inset:0;
 
-  background:url('bg.jpg') center center/cover no-repeat;
+  background:url('bg.jpeg') center center/cover no-repeat;
 
   transform:scale(1.08);
 
@@ -979,9 +979,6 @@ footer {
 </style>
 </head>
 <body>
-<audio id="bg-music" loop>
-    <source src="song.mp3" type="audio/mpeg">
-</audio>
 <canvas id="petal-canvas"></canvas>
 
 <!-- OPENING SCREEN -->
@@ -1001,7 +998,7 @@ footer {
     </div>
 
     <button id="openInviteBtn">
-      Open Invitation
+      <span>Open Invitation</span>
     </button>
 
   </div>
@@ -1219,7 +1216,7 @@ footer {
     <div class="gallery-grid">
       
       <div class="gallery-item">
-        <img src="bg.jpg" alt="Our Moment">
+        <img src="bg.jpeg" alt="Our Moment">
       </div>
     </div>
   </section>
@@ -1331,8 +1328,7 @@ const obs=new IntersectionObserver(es=>{
 },{threshold:0.1});
 document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
 
-/* ─── MUSIC ─── */
-document.addEventListener('click',()=>document.getElementById('bg-music').play().catch(()=>{}),{once:true});
+/* ─── MUSIC (handled by opening screen close) ─── */
 
 /* ─── RSVP ─── */
 function handleRSVP(choice) {
@@ -1355,84 +1351,51 @@ function handleRSVP(choice) {
 }
 
 /* ─── OPENING SCREEN ─── */
+(function(){
+  const BISMILLAH = "بِسْمِ ٱللَّٰهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ";
+  const elText    = document.getElementById("bismillahText");
+  const elScreen  = document.getElementById("openingScreen");
+  const elBtn     = document.getElementById("openInviteBtn");
+  const elMusic   = document.getElementById("bg-music");
+  let idx = 0;
 
-const text = "بِسْمِ ٱللَّٰهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ";
-
-const bismillahElement = document.getElementById("bismillahText");
-const openingScreen = document.getElementById("openingScreen");
-const openInviteBtn = document.getElementById("openInviteBtn");
-const music = document.getElementById("bg-music");
-
-let index = 0;
-
-/* TYPE ANIMATION */
-
-function typeArabicText(){
-
-  if(index < text.length){
-
-    bismillahElement.textContent += text.charAt(index);
-
-    index++;
-
-    setTimeout(typeArabicText, 80);
-
+  function typeNext(){
+    if(idx < BISMILLAH.length){
+      elText.textContent += BISMILLAH.charAt(idx++);
+      setTimeout(typeNext, 80);
+    }
   }
 
-}
-
-/* START TYPING */
-
-window.addEventListener("load", () => {
-
-  typeArabicText();
-
-  createParticles();
-
-});
-
-/* BUTTON CLICK */
-
-openInviteBtn.addEventListener("click", async () => {
-
-  try{
-
-    await music.play();
-
-  }catch(err){}
-
-  openingScreen.classList.add("hide");
-
-});
-
-/* FLOATING PARTICLES */
-
-function createParticles(){
-
-  const container = document.getElementById("openingParticles");
-
-  for(let i = 0; i < 28; i++){
-
-    const particle = document.createElement("span");
-
-    particle.style.left = Math.random() * 100 + "%";
-
-    particle.style.animationDuration =
-      (Math.random() * 10 + 8) + "s";
-
-    particle.style.animationDelay =
-      (Math.random() * 5) + "s";
-
-    particle.style.opacity = Math.random();
-
-    particle.style.transform =
-      `scale(${Math.random() * 1.4 + 0.5})`;
-
-    container.appendChild(particle);
-
+  function closeOpening(){
+    elScreen.classList.add("hide");
+    elMusic && elMusic.play().catch(()=>{});
   }
 
-}  
+  /* Attach click — works on button AND any child span */
+  elBtn.addEventListener("click", closeOpening);
+
+  /* Fallback: also close on any touch/click anywhere on the overlay after 4s */
+  setTimeout(()=>{
+    elScreen.addEventListener("click", closeOpening, {once:true});
+  }, 4000);
+
+  /* Floating particles */
+  function createParticles(){
+    const container = document.getElementById("openingParticles");
+    for(let i=0; i<28; i++){
+      const p = document.createElement("span");
+      p.style.left              = Math.random()*100 + "%";
+      p.style.animationDuration = (Math.random()*10+8) + "s";
+      p.style.animationDelay    = (Math.random()*5) + "s";
+      p.style.opacity           = Math.random();
+      p.style.transform         = `scale(${Math.random()*1.4+0.5})`;
+      container.appendChild(p);
+    }
+  }
+
+  window.addEventListener("load", ()=>{ typeNext(); createParticles(); });
+})();
 </script>
 </body>
 </html>
+
