@@ -1001,7 +1001,7 @@ footer {
     </div>
 
     <button id="openInviteBtn">
-      <span>Open Invitation</span>
+      Open Invitation
     </button>
 
   </div>
@@ -1251,7 +1251,7 @@ footer {
     drops=Array.from({length:180},()=>({
       x:Math.random()*W, y:Math.random()*H,
       len:Math.random()*18+8, speed:Math.random()*3+2,
-      alpha:Math.random()*0.12+0.03
+      alpha:Math.random()*0.22+0.05
     }));
   }
   window.addEventListener('resize',resize); resize();
@@ -1259,7 +1259,7 @@ footer {
     ctx.clearRect(0,0,W,H);
     drops.forEach(d=>{
       ctx.beginPath(); ctx.moveTo(d.x,d.y); ctx.lineTo(d.x-1,d.y+d.len);
-      ctx.strokeStyle=`rgba(74,124,67,${d.alpha})`; ctx.lineWidth=0.6; ctx.stroke();
+      ctx.strokeStyle=`rgba(200,220,255,${d.alpha})`; ctx.lineWidth=0.6; ctx.stroke();
       d.y+=d.speed; if(d.y>H+d.len){d.y=-d.len;d.x=Math.random()*W;}
     });
     requestAnimationFrame(loop);
@@ -1278,7 +1278,7 @@ document.getElementById('scrollCue').addEventListener('click',()=>{
 });
 
 /* ─── COUNTDOWN ─── */
-const target=new Date("August 8, 2026 17:30:00").getTime();
+const target=new Date("June 7, 2026 11:00:00").getTime();
 function pad(n){return String(Math.max(0,n)).padStart(2,'0');}
 function tick(){
   const d=target-Date.now();
@@ -1302,8 +1302,8 @@ setInterval(tick,1000); tick();
       this.sz=Math.random()*3.5+1.5; this.vy=Math.random()*0.8+0.4;
       this.vx=Math.random()*0.6-0.3; this.rot=Math.random()*360;
       this.rv=Math.random()*1.5-0.75;
-      const a=(Math.random()*0.12+0.04).toFixed(2);
-      this.col=Math.random()>0.6?`rgba(74,124,67,${a})`:`rgba(164,210,155,${a})`;
+      const a=(Math.random()*0.18+0.06).toFixed(2);
+      this.col=Math.random()>0.6?`rgba(232,168,48,${a})`:`rgba(240,232,220,${a})`;
     }
     update(sd){
       this.y+=this.vy+sd*0.22; this.x+=this.vx+Math.sin(this.y*0.015)*0.4;
@@ -1334,6 +1334,8 @@ document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
 /* ─── MUSIC ─── */
 document.addEventListener('click',()=>document.getElementById('bg-music').play().catch(()=>{}),{once:true});
 
+
+
 /* ─── RSVP ─── */
 function handleRSVP(choice) {
   const msg = document.getElementById('rsvp-msg');
@@ -1341,19 +1343,18 @@ function handleRSVP(choice) {
   const btnNo = document.getElementById('btn-no');
 
   if (choice === 'yes') {
-    btnYes.style.borderColor = 'var(--amber-glow)';
-    btnYes.style.background = 'rgba(74,124,67,0.08)';
+    btnYes.style.borderColor = '#48c78e';
+    btnYes.style.background = 'rgba(72,199,142,0.08)';
     btnNo.style.opacity = '0.4';
     msg.textContent = '🎉 Jazakallah Khair! We look forward to celebrating with you!';
   } else {
-    btnNo.style.borderColor = '#c47070';
-    btnNo.style.background = 'rgba(180,80,80,0.06)';
+    btnNo.style.borderColor = '#e86464';
+    btnNo.style.background = 'rgba(232,100,100,0.08)';
     btnYes.style.opacity = '0.4';
     msg.textContent = '🤍 JazakAllah. May Allah bless you always.';
   }
   msg.style.opacity = '1';
 }
-
 /* ─── OPENING SCREEN ─── */
 
 const text = "بِسْمِ ٱللَّٰهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ";
